@@ -1,0 +1,90 @@
+
+<mat-card>
+    <mat-card-content>
+      <div *ngIf="(toggleField=='searchMode') else (toggleField=='addMode')? showAddMode : ((toggleField=='editMode')? showEditMode : showResMode)">
+        <!--search page here -->
+        <form #searchFormData="ngForm" class="example-form">
+          <mat-card-actions>
+            <button type="button" (click)="toggle('resMode');getFilterData(searchFormData.value)" mat-raised-button
+              [disabled]="!searchFormData.valid" color="primary">Search</button>
+            <span class="example-icon"></span>
+            
+            <span class="example-icon"></span>
+            <span matTooltip="Show Recent Results">
+              <mat-icon color="primary" (click)="toggle('resMode');getData();">cached</mat-icon>
+            </span>
+          </mat-card-actions>
+          <mat-form-field class="example-form">
+            <input matInput type="text" placeholder="User Id" id="userid" name="userid" #userid="ngModel" ngModel
+              minlength="3" maxlength="50">
+          </mat-form-field>
+          <br>
+          <mat-form-field class="example-form">
+            <input matInput type="text" placeholder="Product Name" id="name" name="name" #name="ngModel" ngModel
+              minlength="3" maxlength="50">
+          </mat-form-field>
+          <br>
+          <mat-form-field class="example-form">
+            <input matInput [matDatepicker]="pickerfromdt" placeholder="From Date" id="fromdt" name="fromdt" #fromdt="ngModel"
+              ngModel>
+            <mat-datepicker-toggle matSuffix [for]="pickerfromdt"></mat-datepicker-toggle>
+            <mat-datepicker #pickerfromdt></mat-datepicker>
+          </mat-form-field>
+          <br>
+          <mat-form-field class="example-form">
+            <input matInput [matDatepicker]="pickertodt" placeholder="To Date" id="todt" name="todt" #todt="ngModel"
+              ngModel>
+            <mat-datepicker-toggle matSuffix [for]="pickertodt"></mat-datepicker-toggle>
+            <mat-datepicker #pickertodt></mat-datepicker>
+          </mat-form-field>
+        </form>
+      </div>
+  
+    </mat-card-content>
+  </mat-card>
+  
+    <ng-template #showResMode>
+    <!--Result page here -->
+    <span class="example-icon"></span>
+    <span class="example-icon"></span>
+    
+    <span class="example-icon"></span>
+    <span matTooltip="Show Recent Results">
+      <mat-icon color="primary" (click)="toggle('searchMode');">search</mat-icon>
+    </span>
+    <div class="example-header">
+  
+      <mat-form-field>
+        <input matInput (keyup)="applyFilter($event.targer.value)" placeholder="Search Recent Results">
+      </mat-form-field>
+    </div>
+    <div class="example-container mat-elevation-z8">
+      <mat-table [dataSource]="dataSource" matSort>
+        <ng-container matColumnDef="category">
+          <mat-header-cell *matHeaderCellDef mat-sort-header>Category</mat-header-cell>
+          <mat-cell *matCellDef="let row">{{row.category}}</mat-cell>
+        </ng-container>
+        <ng-container matColumnDef="scategory">
+          <mat-header-cell *matHeaderCellDef mat-sort-header>SubCategory</mat-header-cell>
+          <mat-cell *matCellDef="let row">{{row.scategory}}</mat-cell>
+        </ng-container>
+        <ng-container matColumnDef="name">
+          <mat-header-cell *matHeaderCellDef mat-sort-header>Name</mat-header-cell>
+          <mat-cell *matCellDef="let row">{{row.name}}</mat-cell>
+        </ng-container>
+        <ng-container matColumnDef="price">
+          <mat-header-cell *matHeaderCellDef mat-sort-header>Price</mat-header-cell>
+          <mat-cell *matCellDef="let row">{{row.price}}</mat-cell>
+        </ng-container>
+        <ng-container matColumnDef="_id">
+          <mat-header-cell *matHeaderCellDef>action</mat-header-cell>          
+           
+        </ng-container>
+        <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+        <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
+      </mat-table>
+      <mat-paginator #paginator [length]="dataSource.filteredData.length" [pageIndex]="0" [pageSize]="5"
+        [pageSizeOptions]="[5, 10, 25, 100]"></mat-paginator>
+    </div>
+  
+  </ng-template>
