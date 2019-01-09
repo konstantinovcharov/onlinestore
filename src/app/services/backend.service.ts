@@ -134,7 +134,7 @@ export class BackendService {
     return docRef.update({
       deleted_flag: "Y",
       _id: id,
-      updatedAt: timestamp,      
+      updatedAt: timestamp,       
       
       authid: this.afAuth.auth.currentUser.uid,
       username: this.afAuth.auth.currentUser.displayName,
